@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/hive/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hive/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java/src/main/java/test/proxy/Proxy.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java/src/main/java/test/proxy/Target.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java/src/main/java/test/proxy/TargetInterface.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/java/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/scala/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/scala/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spark-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spark-core/src/main/java/scala/RDDs/CreateRDD.scala" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spark-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spark/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spark/src/main/resources" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
