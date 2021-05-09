@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 public class PlotMonitor extends AbstractVerticle {
     @Override
     public void start() throws Exception {
-
         vertx.setPeriodic(1000 * 60 * 60, event -> {
             // todo get system resource
             // todo check if chia is running
