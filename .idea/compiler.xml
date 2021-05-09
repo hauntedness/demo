@@ -7,10 +7,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="hive" />
-        <module name="spark-core" />
+        <module name="hdfs-client" />
         <module name="java" />
         <module name="spark" />
         <module name="scala" />
+        <module name="spark-core" />
+        <module name="vertx" />
+        <module name="rtm" />
       </profile>
     </annotationProcessing>
   </component>
