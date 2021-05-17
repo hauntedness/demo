@@ -1,0 +1,1 @@
+﻿java -jar E:\ProgramData\workspace\IdeaProjects\demo\rtm\target\rtm-1.0.0-jar-with-dependencies.jar
