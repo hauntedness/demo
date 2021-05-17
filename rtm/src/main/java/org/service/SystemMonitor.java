@@ -2,7 +2,7 @@ package org.service;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
-import org.common.Properties;
+import org.utils.Properties;
 import org.wechat.WechatMessager;
 
 import java.io.BufferedReader;
@@ -15,7 +15,7 @@ public class SystemMonitor extends AbstractVerticle {
 
 
     @Override
-    public void start() throws Exception {
+    public void start() {
         WechatMessager messager = new WechatMessager(vertx);
         vertx.setPeriodic(Long.parseLong(Properties.with("application.properties").get("messagePeriod")), event -> {
             Future<String> future = messager.getToken();
@@ -48,7 +48,7 @@ public class SystemMonitor extends AbstractVerticle {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
     }
 
 

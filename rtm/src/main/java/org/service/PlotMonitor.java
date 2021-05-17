@@ -3,10 +3,11 @@ package org.service;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import org.beans.PlotStatus;
-import org.common.Logger;
-import org.common.Mihawk;
+import org.beans.PlotStatusMapper;
 import org.common.PlotCache;
-import org.common.Properties;
+import org.common.Session;
+import org.utils.Logger;
+import org.utils.Properties;
 import org.wechat.WechatMessager;
 
 import java.io.IOException;
@@ -14,18 +15,19 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Optional;
 
 public class PlotMonitor extends AbstractVerticle {
 
-    private Properties properties = Properties.with("application.properties");
+    private final Properties properties = Properties.with("application.properties");
 
     @Override
-    public void start() throws Exception {
-        Long epoch[] = new Long[]{1l};
+    public void start() {
+        Long[] epoch = new Long[]{1L};
         vertx.setPeriodic(Long.parseLong(properties.get("messagePeriod")), event -> {
-            epoch[0] = Math.floorMod(epoch[0] + 1, 24l) + 1l;
+            epoch[0] = Math.floorMod(epoch[0] + 1, 24L) + 1L;
             WechatMessager messager = new WechatMessager(vertx);
             PlotCache cache = this.fetch();
             Future<String> future = messager.getToken();
@@ -60,17 +62,16 @@ public class PlotMonitor extends AbstractVerticle {
                                 path1.toFile().lastModified() > System.currentTimeMillis() - 1000 * 60 * 60 * 2)
                         .forEach(path1 -> {
                             long lastModified = path1.toFile().lastModified();
-                            Stream<String> stream = null;
                             try {
                                 PlotStatusMapper mapper = new PlotStatusMapper();
                                 Charset charset = Charset.forName(properties.get("charset"));
                                 Optional<PlotStatus> max = Files.lines(path1, charset)
-                                        .filter(line -> mapper.match(line))
+                                        .filter(mapper::match)
                                         .map(line -> mapper.map(path1.toString(), line))
                                         .max(Comparator.naturalOrder());
                                 if (max.isPresent()) {
                                     max.get().setLastModified(lastModified);
-                                    Mihawk.plotCache.putIfValid(max.get());
+                                    Session.plotCache.putIfValid(max.get());
                                 }
                             } catch (IOException e) {
                                 Logger.logger.error(e.getMessage());
@@ -81,10 +82,10 @@ public class PlotMonitor extends AbstractVerticle {
                 Logger.logger.error(ioException.getMessage());
             }
         });
-        return Mihawk.plotCache;
+        return Session.plotCache;
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
     }
 }

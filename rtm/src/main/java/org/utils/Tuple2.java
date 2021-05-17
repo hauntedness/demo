@@ -1,4 +1,4 @@
-package org.common;
+package org.utils;
 
 import java.io.Serializable;
 
@@ -28,8 +28,4 @@ public class Tuple2<T1, T2> implements Serializable {
         return "(" + (this.t1 == null ? "" : this.t1.toString()) + "," + (this.t2 == null ? "" : this.t2.toString()) + ")";
     }
 
-    public static void main(String[] args) {
-        String s= "1234";
-        System.out.println(s.substring(1, 7));
-    }
 }

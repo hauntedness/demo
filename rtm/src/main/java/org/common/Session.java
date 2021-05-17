@@ -1,21 +1,16 @@
 package org.common;
 
 import io.vertx.ext.web.client.WebClientOptions;
+import org.utils.Properties;
 
-import java.util.HashMap;
-
-public class Mihawk {
+public class Session {
     public static final String SECRET = Properties.with("application.properties").get("secret");
     public static final String CORP_ID = "ww60f2e556a5360f8b";
     public static final String AGENT_ID = Properties.with("application.properties").get("agent");
-    public static final HashMap<String, String> cache = new HashMap<>();
     public static final PlotCache plotCache = new PlotCache();
 
-    public static String token;
-    public static String event = "";
-
     public static class router {
-        public static String get_token_uri = "/cgi-bin/gettoken?corpid=" + Mihawk.CORP_ID + "&corpsecret=" + Mihawk.SECRET;
+        public static String get_token_uri = "/cgi-bin/gettoken?corpid=" + Session.CORP_ID + "&corpsecret=" + Session.SECRET;
         public static String create_chat_group_uri = "/cgi-bin/appchat/create";
         public static String get_chat_group_uri = "/cgi-bin/appchat/get";
         public static String send_group_msg_uri = "/cgi-bin/appchat/send";

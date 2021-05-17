@@ -1,8 +1,7 @@
-package org.service;
+package org.beans;
 
-import org.beans.PlotStatus;
-import org.common.Logger;
-import org.common.Regexp;
+import org.utils.Logger;
+import org.utils.Regexp;
 
 public class PlotStatusMapper {
 
@@ -68,7 +67,6 @@ public class PlotStatusMapper {
             plotStatus.setProgress(progress + "%");
             plotStatus.setPhaseName("Compression tables");
         } else if (plotStatus.getPhaseOrder() == 4) {
-            float order = plotStatus.getStageOder();
             float progress = 96;
             plotStatus.setProgress(progress + "%");
             plotStatus.setPhaseName("Write Checkpoint tables");
@@ -81,7 +79,7 @@ public class PlotStatusMapper {
         plotStatus.setPlotID(path);
         String plotID = (("" + plotStatus.getPlotID()).length() > 14 ?
                 plotStatus.getPlotID().substring(plotStatus.getPlotID().length() - 14) : "");
-        Logger.logger.info(plotID + ": " + plotStatus.toString());
+        Logger.logger.info(plotID + ": " + plotStatus);
         return plotStatus;
     }
 
