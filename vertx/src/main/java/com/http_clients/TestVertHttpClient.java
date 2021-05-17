@@ -7,6 +7,7 @@ import io.vertx.ext.web.client.WebClientOptions;
 
 
 public class TestVertHttpClient {
+
     public static void main(String[] args) {
         Vertx vertx = Vertx.vertx();
 

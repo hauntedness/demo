@@ -21,6 +21,7 @@ public class Properties {
         }
         return wrapper;
     }
+
     public String get(String key) {
         return this.properties.getProperty(key);
     }

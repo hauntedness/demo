@@ -16,8 +16,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
+import java.util.stream.Stream;
 
 public class TestFileSystem {
     public static void main(String[] args) {
@@ -52,18 +52,24 @@ public class TestFileSystem {
                 String[] us = uris.split("\\n");
                 int count = us.length;
                 System.out.println("count:" + count);
-                Arrays.stream(us).forEach(
-                        uri -> {
+                Stream.iterate(0, i -> i + 1).limit(us.length).forEach(
+                        i -> {
+                            String uri = us[i];
                             System.out.println(uri);
                             session.get("www.x23us.us", uri).ssl(false).send(
                                     res -> {
                                         if (res.succeeded()) {
                                             String body = res.result().bodyAsString("UTF-8");
-                                            String title = Regexp.with(body).findFirst("<title>.*?</title>");
+                                            String index = "第 " + i + " 章 ";
+                                            String title = index + Regexp.with(body).findFirst("<title>.*?</title>");
                                             String text = title + "\n" + Regexp.with(body)
                                                     .findFirst("<div id=\"content\" name=\"content\">.+?</div>")
                                                     .replaceAll("&nbsp;", "")
-                                                    .replaceAll("<br />", "");
+                                                    .replaceAll("<br />", "")
+                                                    .replaceAll("<div id=\"content\" name=\"content\">", "")
+                                                    .replaceAll("</div>", "")
+                                                    .replaceAll("<title>", "")
+                                                    .replaceAll("</title>", "");
                                             Tuple2<String, String> tuple2 = new Tuple2<>(uri, text);
                                             list1.add(tuple2);
                                             if (list1.size() == count) {

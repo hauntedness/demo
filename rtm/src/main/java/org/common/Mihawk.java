@@ -5,11 +5,12 @@ import io.vertx.ext.web.client.WebClientOptions;
 import java.util.HashMap;
 
 public class Mihawk {
-    public static final String SECRET = "D8gcrRgSyBt772lgmmpAjcrYWbGFGir3El3cAX1FH-g";
+    public static final String SECRET = Properties.with("application.properties").get("secret");
     public static final String CORP_ID = "ww60f2e556a5360f8b";
-    public static final String AGENT_ID = "1000002";
-    public static final String DEFAULT_CHAT_ID = "fajiazhifu";
+    public static final String AGENT_ID = Properties.with("application.properties").get("agent");
     public static final HashMap<String, String> cache = new HashMap<>();
+    public static final PlotCache plotCache = new PlotCache();
+
     public static String token;
     public static String event = "";
 
