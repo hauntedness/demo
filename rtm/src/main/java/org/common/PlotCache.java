@@ -10,44 +10,10 @@ public class PlotCache {
     private final int capacity = 6;
     private final LinkedList<PlotStatus> data = new LinkedList<>();
 
-    public boolean putIfValid(PlotStatus p) {
-        // keep newest but not duplicated
-        int toBeDeleted = -1;
-        int toBeAdded = -1;
-        for (int i = 0; i < 6; i++) {
-            if (data.size() < i + 1) {
-                toBeAdded = i;
-                break;
-            } else {
-                PlotStatus ith = data.get(i);
-                if (p.getPlotID().equals(ith.getPlotID()) && p.getLastModified() >= ith.getLastModified()) {
-                    toBeDeleted = i;
-                }
-                if (p.getLastModified() >= ith.getLastModified()) {
-                    toBeAdded = i;
-                    break;
-                } else {
-                    continue;
-                }
-            }
-        }
-        if (toBeDeleted >= 0) {
-            data.remove(toBeDeleted);
-        }
-        if (toBeAdded >= 0) {
-            data.add(toBeAdded, p);
-        }
-        // keep 6
-        if (data.size() > capacity) {
-            data.removeLast();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void sort() {
-        data.sort(PlotStatus::compareTo);
+    public void putIfValid(PlotStatus p) {
+        data.push(p);
+        data.sort((e1, e2) -> e1.getLastModified() > e2.getLastModified() ? 1 : -1);
+        data.removeFirst();
     }
 
     public Stream<PlotStatus> stream() {
