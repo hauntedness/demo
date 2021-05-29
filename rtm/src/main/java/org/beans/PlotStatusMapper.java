@@ -54,24 +54,24 @@ public class PlotStatusMapper {
         if (plotStatus.getPhaseOrder() == 1) {
             float order = plotStatus.getStageOder();
             float progress = order / 8 * 40;
-            plotStatus.setProgress(progress + "%");
+            plotStatus.setProgress(progress);
             plotStatus.setPhaseName("Forward Propagation");
         } else if (plotStatus.getPhaseOrder() == 2) {
             float order = plotStatus.getStageOder();
             float progress = 40 + order / 8 * 16;
-            plotStatus.setProgress(progress + "%");
+            plotStatus.setProgress(progress);
             plotStatus.setPhaseName("Backward propagation");
         } else if (plotStatus.getPhaseOrder() == 3) {
             float order = plotStatus.getStageOder();
             float progress = 56 + order / 8 * 40;
-            plotStatus.setProgress(progress + "%");
+            plotStatus.setProgress(progress);
             plotStatus.setPhaseName("Compression tables");
         } else if (plotStatus.getPhaseOrder() == 4) {
             float progress = 96;
-            plotStatus.setProgress(progress + "%");
+            plotStatus.setProgress(progress);
             plotStatus.setPhaseName("Write Checkpoint tables");
         } else if (plotStatus.getPhaseOrder() == 5) {
-            plotStatus.setProgress("100%");
+            plotStatus.setProgress(100);
             plotStatus.setPhaseName("Generate Final File");
         } else if (plotStatus.getPhaseOrder() == 6) {
             plotStatus.setPhaseName("Error occurred");

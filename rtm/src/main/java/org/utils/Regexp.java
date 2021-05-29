@@ -24,15 +24,16 @@ public class Regexp {
 
     public String findFirst(String reg) {
         this.matcher(reg);
-        boolean found = this.matcher.find();
-        if (this.matcher.groupCount() > 0) {
-            return this.matcher.group(1);
-        } else if (found) {
-            return this.matcher.group(1);
-
+        if (this.matcher.find()) {
+            if (this.matcher.groupCount() > 0) {
+                return this.matcher.group(1);
+            } else {
+                return this.matcher.group();
+            }
         } else {
             return "";
         }
+
     }
 
     public String findGroup(String reg, int group) {

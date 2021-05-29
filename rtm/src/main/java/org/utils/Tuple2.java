@@ -27,5 +27,4 @@ public class Tuple2<T1, T2> implements Serializable {
 
         return "(" + (this.t1 == null ? "" : this.t1.toString()) + "," + (this.t2 == null ? "" : this.t2.toString()) + ")";
     }
-
 }

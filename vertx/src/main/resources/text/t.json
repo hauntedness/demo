@@ -1,0 +1,43 @@
+{
+  "coins": [
+    {
+      "coin_id": "0x1a98c46260b7f076f42b56de2b68df4627a610c259ef7bb75c2e6996e3c26b38",
+      "puzzle_hash": "0x586f58cc7c9d0e70ff58ca37381dd4af43c0eefcbc0c5ddac7ab27db805d81f2",
+      "parent_coin_info": "0xccd5bb71183532bff220ba46c268991a00000000000000000000000000050447",
+      "amount": 1750000000000,
+      "coinbase": true,
+      "confirmed_block_index": 328778,
+      "spent": true,
+      "spent_block_index": 328891,
+      "timestamp": "1621848416",
+      "block_header_hash": "0xe148d03a847b322741fe0d6dc44e49b10de55eb19655355f1e993616a9905d71",
+      "block_height": 328891
+    },
+    {
+      "coin_id": "0x4596b9e0ac12cad1524da5aa4387ee8e4440884f58bc0a4c7098e6418b285efb",
+      "puzzle_hash": "0x586f58cc7c9d0e70ff58ca37381dd4af43c0eefcbc0c5ddac7ab27db805d81f2",
+      "parent_coin_info": "0x3ff07eb358e8255a65c30a2dce0e5fbb00000000000000000000000000050447",
+      "amount": 250000000000,
+      "coinbase": true,
+      "confirmed_block_index": 328778,
+      "spent": true,
+      "spent_block_index": 328891,
+      "timestamp": "1621848416",
+      "block_header_hash": "0xe148d03a847b322741fe0d6dc44e49b10de55eb19655355f1e993616a9905d71",
+      "block_height": 328891
+    },
+    {
+      "coin_id": "0x0ec7f55b0881808ef55e9df9694a2a3ac82d420e8ddabad307d3436e8fa09fb6",
+      "puzzle_hash": "0x586f58cc7c9d0e70ff58ca37381dd4af43c0eefcbc0c5ddac7ab27db805d81f2",
+      "parent_coin_info": "0x0a6286ccc2e48a033e8a12f1c7732e4db7ae98bc9c2ddef533c6d50191f758b3",
+      "amount": 100,
+      "coinbase": false,
+      "confirmed_block_index": 281138,
+      "spent": false,
+      "spent_block_index": 0,
+      "timestamp": "1621019799",
+      "block_header_hash": "0xc868d59007d67028632a3ff0123efdb5bc08a8524f282541a9adac04273f8b37",
+      "block_height": 281138
+    }
+  ]
+}

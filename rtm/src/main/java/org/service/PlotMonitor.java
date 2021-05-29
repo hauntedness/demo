@@ -2,21 +2,24 @@ package org.service;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
-import org.beans.PlotStatus;
-import org.beans.PlotStatusMapper;
+import org.beans.PlotSlice;
 import org.common.PlotCache;
 import org.common.Session;
 import org.utils.Logger;
 import org.utils.Properties;
+import org.utils.Regexp;
+import org.wechat.AnotherDimention;
 import org.wechat.WechatMessager;
 
+import javax.management.relation.InvalidRelationIdException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.Date;
 import java.util.Optional;
 
 public class PlotMonitor extends AbstractVerticle {
@@ -25,32 +28,38 @@ public class PlotMonitor extends AbstractVerticle {
 
     @Override
     public void start() {
-        Long[] epoch = new Long[]{1L};
         vertx.setPeriodic(Long.parseLong(properties.get("messagePeriod")), event -> {
-            epoch[0] = Math.floorMod(epoch[0] + 1, 24L) + 1L;
             WechatMessager messager = new WechatMessager(vertx);
             PlotCache cache = this.fetch();
             Future<String> future = messager.getToken();
-            future.onSuccess(token -> {
-                cache.stream().forEach(plot -> {
-                            String msg1 = properties.get("nodeName") + "\n";
-                            String msg2 = "epoch: " + epoch[0] + "\n";
-                            String msg3 = "";
+            future.compose(ar -> AnotherDimention.getRandomMC(vertx, ar)).onSuccess(tuple2 -> {
+                String token = tuple2._1();
+                String picURL = tuple2._2();
+                String title = new Date().toString();
+                String desc = cache.stream().map(plot -> {
+                            String msg2 = "";
                             String plotID = plot.getPlotID() + "";
-                            if (plotID.length() > 14) {
-                                msg3 = "file name: " + plotID.substring(plotID.length() - 14) + "\n";
+                            if (plotID.length() > 20) {
+                                msg2 = "**" + plotID.substring(plotID.length() - 20) + "**\n";
                             }
-                            String msg4 = "progress: " + plot.getProgress() + "\n";
-                            String msg5 = "phase: " + plot.getPhaseName() + "\n";
-                            String msg6 = "stage: " + plot.getStageValue() + "\n";
-                            String msg = msg1 + msg2 + msg3 + msg4 + msg5 + msg6;
-                            messager.sendMsg(token, msg);
+                            String hour = new DecimalFormat("##0")
+                                    .format(plot.valuate().longValue() / 3600l);
+                            String minute = new DecimalFormat("##0")
+                                    .format((plot.valuate().longValue() % 3600l) / 60);
+                            String msg3 = "时 间:" + hour + "小时" + minute + "分钟\n";
+                            String msg4 = "进 度:" + cache.predictPercentage(plot.valuate()) + "\n";
+                            String msg5 = "错 误:" + plot.getError() + "\n";
+                            return msg2 + msg3 + msg4 + msg5 + "\n";
                         }
-                );
+                ).reduce(String::concat).orElse("");
+                if (!desc.equals("")) {
+                    messager.sendNews(token, title, desc, picURL);
+                }
                 cache.clear();
             });
         });
     }
+
 
     private PlotCache fetch() {
         String[] plotterLogPaths = properties.get("plotterLogPaths").split(",");
@@ -63,15 +72,22 @@ public class PlotMonitor extends AbstractVerticle {
                         .forEach(path1 -> {
                             long lastModified = path1.toFile().lastModified();
                             try {
-                                PlotStatusMapper mapper = new PlotStatusMapper();
                                 Charset charset = Charset.forName(properties.get("charset"));
-                                Optional<PlotStatus> max = Files.lines(path1, charset)
-                                        .filter(mapper::match)
-                                        .map(line -> mapper.map(path1.toString(), line))
-                                        .max(Comparator.naturalOrder());
-                                if (max.isPresent()) {
-                                    max.get().setLastModified(lastModified);
-                                    Session.plotCache.putIfValid(max.get());
+                                Optional<PlotSlice> optionalPlotSlice = Files.lines(path1, charset)
+                                        .filter(line -> Regexp.with(line).find("(\\d+\\.\\d*) seconds|error|exception|fail"))
+                                        .map(line -> new PlotSlice(path1.toString(), line))
+                                        .reduce((p1, p2) -> {
+                                                    try {
+                                                        return p1.merge(p2, null);
+                                                    } catch (InvalidRelationIdException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    return p1;
+                                                }
+                                        );
+                                if (optionalPlotSlice.isPresent()) {
+                                    optionalPlotSlice.get().setLastModified(lastModified);
+                                    Session.plotCache.putIfValid(optionalPlotSlice.get());
                                 }
                             } catch (IOException e) {
                                 Logger.logger.error(e.getMessage());

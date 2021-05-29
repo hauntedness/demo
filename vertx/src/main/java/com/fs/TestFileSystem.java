@@ -60,17 +60,20 @@ public class TestFileSystem {
                                     res -> {
                                         if (res.succeeded()) {
                                             String body = res.result().bodyAsString("UTF-8");
-                                            String index = "第 " + i + " 章 ";
-                                            String title = index + Regexp.with(body).findFirst("<title>.*?</title>");
-                                            String text = title + "\n" + Regexp.with(body)
+                                            int bai = i/100;
+                                            int shi = i / 10;
+                                            int ge = i;
+                                            String han = "";
+                                            String title = "\n第 " + i + " 章\n";
+                                            String text = Regexp.with(body)
                                                     .findFirst("<div id=\"content\" name=\"content\">.+?</div>")
                                                     .replaceAll("&nbsp;", "")
                                                     .replaceAll("<br />", "")
                                                     .replaceAll("<div id=\"content\" name=\"content\">", "")
                                                     .replaceAll("</div>", "")
-                                                    .replaceAll("<title>", "")
-                                                    .replaceAll("</title>", "");
-                                            Tuple2<String, String> tuple2 = new Tuple2<>(uri, text);
+                                                    .replaceAll("第.卷", "")
+                                                    .replaceAll("第.章", "");
+                                            Tuple2<String, String> tuple2 = new Tuple2<>(uri, title + text);
                                             list1.add(tuple2);
                                             if (list1.size() == count) {
                                                 promise.complete("");
