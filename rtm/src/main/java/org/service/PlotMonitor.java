@@ -62,7 +62,8 @@ public class PlotMonitor extends AbstractVerticle {
 
 
     private PlotCache fetch() {
-        String[] plotterLogPaths = properties.get("plotterLogPaths").split(",");
+        String user = (String) (vertx.sharedData().getLocalMap("args").get("user"));
+        String[] plotterLogPaths = properties.get("plotterLogPaths").replaceAll("\\{user\\}", user).split(",");
         Arrays.stream(plotterLogPaths).forEach(plotterLogPath -> {
             Path path = Paths.get(plotterLogPath);
             try {
