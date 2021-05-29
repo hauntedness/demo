@@ -9,8 +9,9 @@ import org.wechat.WechatMessager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.stream.Collectors;
 
 public class SystemMonitor extends AbstractVerticle {
@@ -31,6 +32,7 @@ public class SystemMonitor extends AbstractVerticle {
         vertx.executeBlocking(promise -> {
             if (System.getProperties().getProperty("os.name").matches(".*Window.*")) {
                 String user = (String) vertx.sharedData().getLocalMap("args").get("user");
+                String node = (String) vertx.sharedData().getLocalMap("args").get("node");
                 Arrays.stream(Properties.with("application.properties").get("shellPaths").replaceAll("\\{user\\}", user)
                         .split(",")).forEach(shellPath -> {
                             String[] cmd = {"powershell.exe", shellPath};
@@ -39,7 +41,7 @@ public class SystemMonitor extends AbstractVerticle {
                             try {
                                 Process exec = builder.start();
                                 BufferedReader br = new BufferedReader(new InputStreamReader(exec.getInputStream()));
-                                String title = new Date().toString();
+                                String title = node + "\t" + LocalDate.now().format(DateTimeFormatter.ISO_DATE_TIME);
                                 String msg = br.lines().collect(Collectors.joining("\n"));
                                 messager.sendNews(token, title, msg, picURL);
                             } catch (IOException e) {

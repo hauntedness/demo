@@ -18,8 +18,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Optional;
 
 public class PlotMonitor extends AbstractVerticle {
@@ -35,7 +36,8 @@ public class PlotMonitor extends AbstractVerticle {
             future.compose(ar -> AnotherDimention.getRandomMC(vertx, ar)).onSuccess(tuple2 -> {
                 String token = tuple2._1();
                 String picURL = tuple2._2();
-                String title = new Date().toString();
+                String node = (String) vertx.sharedData().getLocalMap("args").get("node");
+                String title = node + "\t" +  LocalDate.now().format(DateTimeFormatter.ISO_DATE_TIME);
                 String desc = cache.stream().map(plot -> {
                             String msg2 = "";
                             String plotID = plot.getPlotID() + "";
